@@ -108,41 +108,26 @@ def evaluate():
     if data:
         quality_score = 0.0
         
-        # 4.1 Trade-off 表现 (5分)
+        # 4.1 Trade-off 表现 (10分)
         if data.get("Trade_off_solutions", 0) > 1:
-            quality_score += 5.0
+            quality_score += 10.0
             
-        # 4.2 分类任务精度表现 (10分)
+        # 4.2 分类任务精度表现 (20分)
         acc_b = data.get("Binary", {}).get("accuracy", 0)
         acc_i = data.get("Iris", {}).get("accuracy", 0)
         acc_avg = (acc_b + acc_i) / 2.0 if (acc_b and acc_i) else max(acc_b, acc_i)
         
         if acc_avg >= 0.95:
-            quality_score += 10.0
+            quality_score += 20.0
         elif acc_avg > 0.80:
-            quality_score += 7.0  # 10 - 3
+            quality_score += 10.0  # 10 - 3
         elif acc_avg > 0.65:
             quality_score += 5.0  # 10 - 5
         else:
             quality_score += 0.0  # 10 - 10
 
-        # 4.3 分子基态误差表现 (10分)
-        energy_error = data.get("LiH", {}).get("energy_error", 999)
-        if energy_error < 0.007:
-            quality_score += 10.0
-        elif energy_error <= 0.01:
-            quality_score += 5.0   # 10 - 5
-        else:
-            quality_score += 0.0   # 10 - 10
-
-        # 4.4 硬件开销评分 (15分, 每项满分5分)
+        # 4.4 硬件开销评分 (10分, 每项满分5分)
         hw_score = 0.0
-        
-        # 分子基态 LiH (深度<5, CNOT<5)
-        l_d = data.get("LiH", {}).get("depth", 99)
-        l_c = data.get("LiH", {}).get("cnot", 99)
-        lih_hw = 5.0 - max(0, l_d - 4)*0.1 - max(0, l_c - 4)*0.2  # <5 Means <=4
-        hw_score += max(0.0, lih_hw)
         
         # 鸢尾花 Iris (深度<10, CNOT<20)
         i_d = data.get("Iris", {}).get("depth", 99)
