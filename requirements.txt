@@ -4,5 +4,6 @@ mindspore==2.7.0;
 numpy==1.26.4; 
 scipy==1.13.1; 
 scikit-learn==1.6.1;
+pyscf>=2.6.2
 openfermion>=1.6.1; 
 openfermionpyscf>=0.5
